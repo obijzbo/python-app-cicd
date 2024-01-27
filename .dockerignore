@@ -1,2 +1,6 @@
+.pytest_cache
+.idea/
+__pycache__/
+venv/
 shells
 movies.sql

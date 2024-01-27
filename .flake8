@@ -1,0 +1,48 @@
+[flake8]
+# Maximum line length
+max-line-length = 120
+
+# Ignore certain errors and warnings
+ignore =
+    # E203: Whitespace before ':'
+    E203,
+    # E501: Line too long
+    E501,
+    # W503: Line break occurred before a binary operator
+    W503
+
+# Selecting error and warning messages to be reported
+select =
+    # E: Syntax errors
+    E,
+    # W: Warning messages
+    W,
+    # F: Fatal errors (logical error, not necessarily syntax error)
+    F,
+    # C: Coding style violations
+    C
+
+# Excluding files and directories from linting
+exclude =
+    .git,
+    __pycache__,
+    venv,
+    .idea
+
+# Plugins: Additional linters
+plugins =
+    flake8-docstrings,  # Docstring conventions checker
+    pep8-naming  # Naming conventions checker
+
+# Docstring conventions checker: Ignore certain errors
+[flake8-docstrings]
+ignore =
+    D100, D104, D105, D200, D204, D205, D207, D400, D401
+
+# Naming conventions checker
+[pep8-naming]
+# Additional naming checks can be added as needed
+exclude =
+    .git,
+    __pycache__,
+    venv

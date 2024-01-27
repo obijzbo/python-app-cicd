@@ -1,0 +1,58 @@
+name: CI on PR
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'dev/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    outputs:
+      result: ${{ steps.accept_pr.outputs.result }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pytest
+
+      - name: Lint with Flake8
+        id: lint
+        run: |
+          flake8 .
+        continue-on-error: true
+
+      - name: Run Unit Tests with pytest
+        id: test
+        run: |
+          pytest test_main.py
+        continue-on-error: false
+
+      - name: Set result
+        id: accept_pr
+        run: echo "result=success" # Set the result to success by default
+
+  merge:
+    needs: build
+    runs-on: ubuntu-latest
+    if: ${{ needs.build.outputs.result == 'success' }}
+
+    steps:
+      - name: Merge to Main
+        run: |
+          # Use your preferred method to merge the PR from dev to main
+          git checkout main
+          git merge --no-ff ${{ github.event.before }}
+          git push origin main

@@ -1,0 +1,12 @@
+- name: Extract version from commit message
+  id: extract_version
+  run: |
+    version=$(git log -1 --pretty=%B | grep -oP 'Release: \K.*')
+    echo "::set-output name=version::${version}"
+        
+- name: Build and push Docker image
+  uses: docker/build-push-action@v2
+  with:
+    context: .
+    push: true
+    tags: ${{ steps.extract_version.outputs.version }}
